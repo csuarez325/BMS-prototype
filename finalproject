@@ -51,3 +51,53 @@ public class BMSPrototype {
     static List<Item> menu = new ArrayList<>();
     static List<Shift> schedule = new ArrayList<>();
 
+public static void main(String[] args) {
+       seedData();
+       login();
+   }
+
+
+   static void seedData() {
+       users.add(new User("cashier1", "pass123", "Cashier"));
+       users.add(new User("manager1", "admin123", "Manager"));
+
+
+       menu.add(new Item("Latte", 3.50, 10));
+       menu.add(new Item("Espresso", 2.75, 8));
+       menu.add(new Item("Muffin", 1.80, 5));
+
+
+       schedule.add(new Shift("Alice", "Cashier", "9AM - 1PM"));
+       schedule.add(new Shift("Bob", "Barista", "1PM - 5PM"));
+   }
+
+
+   static void login() {
+       System.out.println("=== Barista Management System ===");
+       System.out.print("Username: ");
+       String username = scanner.nextLine();
+       System.out.print("Password: ");
+       String password = scanner.nextLine();
+
+
+       if (username.isEmpty() || password.isEmpty()) {
+           System.out.println("Error: Username or password cannot be empty.");
+           return;
+       }
+
+
+       for (User u : users) {
+           if (u.username.equals(username) && u.password.equals(password)) {
+               System.out.println("Login successful! Role: " + u.role);
+               if (u.role.equals("Cashier")) {
+                   posModule();
+               } else if (u.role.equals("Manager")) {
+                   managerModule();
+               } else {
+                   System.out.println("Feature for role '" + u.role + "' not implemented in prototype.");
+               }
+               return;
+           }
+       }
+       System.out.println("Invalid credentials. Try again.");
+   }
