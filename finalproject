@@ -221,4 +221,135 @@ public static void main(String[] args) {
            }
        }
    }
+static void reportModule() {
+       System.out.println("\n=== Reports Module ===");
+       System.out.println("Sales Report:");
+       double totalRevenue = 0;
 
+
+       for (Item item : menu) {
+           double revenue = item.sold * item.price;
+           System.out.println(item.name + ": Sold " + item.sold + " | Revenue: $" + revenue);
+           totalRevenue += revenue;
+       }
+
+
+       System.out.println("\nTotal Revenue: $" + totalRevenue);
+   }
+
+
+   static void scheduleModule() {
+       System.out.println("\n=== Staff Scheduling Module ===");
+
+
+       while (true) {
+           System.out.println("Current Shifts:");
+           for (int i = 0; i < schedule.size(); i++) {
+               Shift shift = schedule.get(i);
+               System.out.println((i + 1) + ". " + shift.employeeName + " - " + shift.role + " - " + shift.shiftTime);
+           }
+
+
+           System.out.print("Select option: (1=Add, 2=Delete, 3=Edit, 0=Exit): ");
+           String input = scanner.nextLine();
+
+
+           switch (input) {
+               case "1":
+                   System.out.print("Employee Name: ");
+                   String name = scanner.nextLine();
+                   System.out.print("Role: ");
+                   String role = scanner.nextLine();
+                   System.out.print("Shift Time: ");
+                   String time = scanner.nextLine();
+
+
+                   if (name.isEmpty() || role.isEmpty() || time.isEmpty()) {
+                       System.out.println("All fields are required.");
+                       break;
+                   }
+
+
+                   schedule.add(new Shift(name, role, time));
+                   System.out.println("Shift added successfully.");
+                   break;
+               case "2":
+                   System.out.print("Enter shift number to delete: ");
+                   try {
+                       int index = Integer.parseInt(scanner.nextLine());
+                       if (index < 1 || index > schedule.size()) {
+                           System.out.println("Invalid shift number.");
+                           break;
+                       }
+                       schedule.remove(index - 1);
+                       System.out.println("Shift deleted.");
+                   } catch (NumberFormatException e) {
+                       System.out.println("Invalid input.");
+                   }
+                   break;
+               case "3":
+                   System.out.print("Enter shift number to edit: ");
+                   try {
+                       int index = Integer.parseInt(scanner.nextLine());
+                       if (index < 1 || index > schedule.size()) {
+                           System.out.println("Invalid shift number.");
+                           break;
+                       }
+                       Shift s = schedule.get(index - 1);
+                       System.out.print("New Name (" + s.employeeName + "): ");
+                       String newName = scanner.nextLine();
+                       System.out.print("New Role (" + s.role + "): ");
+                       String newRole = scanner.nextLine();
+                       System.out.print("New Shift Time (" + s.shiftTime + "): ");
+                       String newTime = scanner.nextLine();
+
+
+                       if (!newName.isEmpty()) s.employeeName = newName;
+                       if (!newRole.isEmpty()) s.role = newRole;
+                       if (!newTime.isEmpty()) s.shiftTime = newTime;
+
+
+                       System.out.println("Shift updated.");
+                   } catch (NumberFormatException e) {
+                       System.out.println("Invalid input.");
+                   }
+                   break;
+               case "0":
+                   return;
+               default:
+                   System.out.println("Invalid option.");
+           }
+       }
+   }
+
+
+   static void managerModule() {
+       while (true) {
+           System.out.println("\n=== Manager Menu ===");
+           System.out.println("1. Inventory Management");
+           System.out.println("2. View Reports");
+           System.out.println("3. Staff Scheduling");
+           System.out.println("0. Logout");
+           System.out.print("Select an option: ");
+
+
+           String input = scanner.nextLine();
+           switch (input) {
+               case "1":
+                   inventoryModule();
+                   break;
+               case "2":
+                   reportModule();
+                   break;
+               case "3":
+                   scheduleModule();
+                   break;
+               case "0":
+                   System.out.println("Logging out.");
+                   return;
+               default:
+                   System.out.println("Invalid option.");
+           }
+       }
+   }
+}
